@@ -1,53 +1,383 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
 :root {
-  --text-primary: #242424;
-  --text-secondary: #424242;
-  --background: #FFFFFF;
-  --surface: #FAFAFA;
-  --border: #D1D1D1;
+  /* Fluent 2 Design Tokens - Light Theme */
+  --fluent-font-family: "Segoe UI Variable", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --fluent-font-mono: "Segoe UI Numeric", "Segoe UI", SFMono-Regular, Consolas, monospace;
+
+  --fluent-bg-canvas: #f3f3f3;
+  --fluent-bg-card: #ffffff;
+  --fluent-bg-card-secondary: #fafafa;
+  --fluent-bg-subtle: #f5f5f5;
+  --fluent-bg-hover: #f0f0f0;
+  --fluent-bg-active: #e5e5e5;
+
+  --fluent-text-primary: #242424;
+  --fluent-text-secondary: #616161;
+  --fluent-text-disabled: #a1a1a1;
+
+  --fluent-stroke: #e0e0e0;
+  --fluent-stroke-subtle: #ebebeb;
+  --fluent-stroke-strong: #d1d1d1;
+
+  /* Fluent Brand Tokens */
+  --fluent-brand: #0f6cbd;
+  --fluent-brand-hover: #115ea3;
+  --fluent-brand-active: #0c3b5e;
+  --fluent-brand-tint: #ebf3fc;
+  --fluent-on-brand: #ffffff;
+
+  /* Fluent 2 Radii */
+  --fluent-radius-s: 4px;
+  --fluent-radius-m: 8px;
+  --fluent-radius-l: 12px;
+  --fluent-radius-pill: 9999px;
+
+  /* Fluent 2 Elevation Shadows */
+  --fluent-shadow-card: 0 2px 4px rgba(0, 0, 0, 0.04), 0 0 2px rgba(0, 0, 0, 0.06);
+  --fluent-shadow-elevated: 0 8px 16px rgba(0, 0, 0, 0.08), 0 0 2px rgba(0, 0, 0, 0.04);
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Fluent 2 Design Tokens - Dark Theme */
+    --fluent-bg-canvas: #202020;
+    --fluent-bg-card: #2c2c2c;
+    --fluent-bg-card-secondary: #242424;
+    --fluent-bg-subtle: #292929;
+    --fluent-bg-hover: #333333;
+    --fluent-bg-active: #3d3d3d;
+
+    --fluent-text-primary: #ffffff;
+    --fluent-text-secondary: #adadad;
+    --fluent-text-disabled: #707070;
+
+    --fluent-stroke: #383838;
+    --fluent-stroke-subtle: #2e2e2e;
+    --fluent-stroke-strong: #484848;
+
+    --fluent-brand: #479ef5;
+    --fluent-brand-hover: #62abf5;
+    --fluent-brand-active: #2886de;
+    --fluent-brand-tint: #1a3655;
+    --fluent-on-brand: #0f0f0f;
+
+    --fluent-shadow-card: 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 2px rgba(0, 0, 0, 0.1);
+    --fluent-shadow-elevated: 0 8px 16px rgba(0, 0, 0, 0.3), 0 0 2px rgba(0, 0, 0, 0.2);
+
+    color-scheme: dark;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
   display: flex;
   flex-direction: column;
-  margin: 0;
-  height: 100vh;
-  font-family: "Segoe UI Variable", "Segoe UI", sans-serif;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--fluent-bg-canvas);
+  color: var(--fluent-text-primary);
+  font-family: var(--fluent-font-family);
+  font-size: 14px;
+  line-height: 20px;
+  -webkit-font-smoothing: antialiased;
 }
 
-nav > ul {
+
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--fluent-bg-card);
+  border-bottom: 1px solid var(--fluent-stroke-subtle);
+  box-shadow: var(--fluent-shadow-card);
+}
+
+nav ul {
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 8px 16px 0 16px;
   list-style: none;
 }
 
-nav > ul > li {
-  flex: 1 1 auto;
-  text-align: center;
+nav li {
+  flex: 0 1 auto;
 }
+
+nav a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px 14px 16px;
+  color: var(--fluent-text-secondary);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: var(--fluent-radius-s) var(--fluent-radius-s) 0 0;
+  transition: color 120ms ease, background-color 120ms ease;
+}
+
+nav a:hover {
+  background-color: var(--fluent-bg-hover);
+  color: var(--fluent-text-primary);
+}
+
+nav a:active {
+  background-color: var(--fluent-bg-active);
+}
+
+/* Selected Active Tab Highlight Line */
+body:has(#clock:target) nav a[href="#clock"],
+body:has(#alarm:target) nav a[href="#alarm"],
+body:has(#stopwatch:target) nav a[href="#stopwatch"],
+body:has(#timer:target) nav a[href="#timer"],
+body:not(:has(main > section:target)) nav a[href="#clock"] {
+  color: var(--fluent-brand);
+}
+
+body:has(#clock:target) nav a[href="#clock"]::after,
+body:has(#alarm:target) nav a[href="#alarm"]::after,
+body:has(#stopwatch:target) nav a[href="#stopwatch"]::after,
+body:has(#timer:target) nav a[href="#timer"]::after,
+body:not(:has(main > section:target)) nav a[href="#clock"]::after {
+  position: absolute;
+  right: 12px;
+  bottom: 0;
+  left: 12px;
+  height: 3px;
+  background-color: var(--fluent-brand);
+  border-radius: var(--fluent-radius-pill);
+  content: "";
+}
+
 
 main {
   display: flex;
   flex: 1;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 24px 16px;
 }
 
-main > section:not(:target) {
+main > section {
   display: none;
+  width: 100%;
+  max-width: 540px;
+  margin: auto;
+  padding: 36px 28px;
+  background-color: var(--fluent-bg-card);
+  border: 1px solid var(--fluent-stroke-subtle);
+  border-radius: var(--fluent-radius-l);
+  box-shadow: var(--fluent-shadow-elevated);
+  text-align: center;
 }
+
+main > section:target {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+body:not(:has(main > section:target)) #clock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 
 time {
-  background: lightgrey;
-  padding: 20px;
-  border-radius: 8px;
-  font-size: 8rem;
-  text-align: center;
-  margin: auto 0;
-  color: var(--text-primary);
+  display: block;
+  margin: 16px 0 28px 0;
+  color: var(--fluent-text-primary);
+  font-family: var(--fluent-font-mono);
+  font-size: clamp(2.4rem, 8vw, 4.2rem);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+  user-select: none;
 }
 
-#alarm, #clock, #stopwatch, #timer {
-  background: blue;
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+}
+
+button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 6px 16px;
+  background-color: var(--fluent-bg-card);
+  color: var(--fluent-text-primary);
+  font-family: var(--fluent-font-family);
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid var(--fluent-stroke-strong);
+  border-radius: var(--fluent-radius-s);
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 120ms ease, border-color 120ms ease, transform 60ms ease;
+}
+
+button:hover {
+  background-color: var(--fluent-bg-hover);
+}
+
+button:active {
+  background-color: var(--fluent-bg-active);
+  transform: scale(0.98);
+}
+
+button.start,
+button.add {
+  background-color: var(--fluent-brand);
+  color: var(--fluent-on-brand);
+  border-color: var(--fluent-brand);
+}
+
+button.start:hover,
+button.add:hover {
+  background-color: var(--fluent-brand-hover);
+  border-color: var(--fluent-brand-hover);
+}
+
+button.start:active,
+button.add:active {
+  background-color: var(--fluent-brand-active);
+  border-color: var(--fluent-brand-active);
+}
+
+button.delete {
+  border-color: transparent;
+  background-color: transparent;
+  color: #d13438;
+}
+
+button.delete:hover {
+  background-color: rgba(209, 52, 56, 0.08);
+}
+
+
+input[type="time"] {
+  min-height: 36px;
+  padding: 6px 12px;
+  background-color: var(--fluent-bg-card);
+  color: var(--fluent-text-primary);
+  font-family: var(--fluent-font-mono);
+  font-size: 14px;
+  border: 1px solid var(--fluent-stroke-strong);
+  border-bottom: 2px solid var(--fluent-text-secondary);
+  border-radius: var(--fluent-radius-s);
+  outline: none;
+  transition: border-color 120ms ease, background-color 120ms ease;
+}
+
+input[type="time"]:hover {
+  background-color: var(--fluent-bg-hover);
+}
+
+input[type="time"]:focus {
+  border-bottom-color: var(--fluent-brand);
+  background-color: var(--fluent-bg-card);
+}
+
+input.current-interval {
+  border: 2px solid var(--fluent-brand);
+  background-color: var(--fluent-brand-tint);
+}
+
+
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.alarms,
+.timers {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  background-color: var(--fluent-bg-subtle);
+  border: 1px solid var(--fluent-stroke-subtle);
+  border-radius: var(--fluent-radius-m);
+}
+
+.alarms[ringing] {
+  border-color: var(--fluent-brand);
+  box-shadow: 0 0 0 2px var(--fluent-brand-tint);
+  animation: fluent-pulse 1.2s infinite alternate;
+}
+
+@keyframes fluent-pulse {
+  from { background-color: var(--fluent-bg-subtle); }
+  to { background-color: var(--fluent-brand-tint); }
+}
+
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--fluent-brand);
+  outline-offset: 2px;
+}
+
+
+@media (max-width: 480px) {
+  nav ul {
+    gap: 0;
+    padding: 4px 8px 0 8px;
+  }
+
+  nav a {
+    padding: 10px 10px 12px 10px;
+    font-size: 13px;
+  }
+
+  main {
+    padding: 16px 12px;
+  }
+
+  main > section {
+    padding: 24px 16px;
+  }
+
+  time {
+    font-size: clamp(2.1rem, 11vw, 3rem);
+    margin: 12px 0 20px 0;
+  }
+
+  .alarms,
+  .timers {
+    justify-content: center;
+    padding: 12px;
+  }
 }
