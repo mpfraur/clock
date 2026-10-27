@@ -1,8 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --text-primary: #242424;
+  --text-secondary: #424242;
+  --background: #FFFFFF;
+  --surface: #FAFAFA;
+  --border: #D1D1D1;
+}
+
 body {
   display: flex;
   flex-direction: column;
   margin: 0;
   height: 100vh;
+  font-family: "Segoe UI Variable", "Segoe UI", sans-serif;
 }
 
 nav > ul {
@@ -18,8 +29,25 @@ nav > ul > li {
 
 main {
   display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
 }
 
 main > section:not(:target) {
   display: none;
+}
+
+time {
+  background: lightgrey;
+  padding: 20px;
+  border-radius: 8px;
+  font-size: 8rem;
+  text-align: center;
+  margin: auto 0;
+  color: var(--text-primary);
+}
+
+#alarm, #clock, #stopwatch, #timer {
+  background: blue;
 }
