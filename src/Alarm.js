@@ -1,3 +1,5 @@
+const alarmLoudSound = new Audio("./public/audio/alarm.mp3");
+
 export default class Alarm extends HTMLElement {
   #intervalCallback;
   #intervalId = 0;
@@ -7,24 +9,41 @@ export default class Alarm extends HTMLElement {
     this.addEventListener("click", this);
     this.duration = 60 * 1000;
     this.#intervalCallback = () => {
+      let isRinging = false;
+
       this.alarms.forEach((alarm) => {
         const { value } = alarm.querySelector("input");
         const date =
-          new Date(value).getTime() ||
-          new Date(`${new Date().toLocaleDateString()} ${value}`).getTime();
+            new Date(value).getTime() ||
+            new Date(`${new Date().toLocaleDateString()} ${value}`).getTime();
+
         if (date) {
           const delta = Date.now() - date;
-          if (delta > 0 && delta < new Date(this.duration)) {
-            alarm.setAttribute("ringing", "");
-            this.dispatchEvent(
-              new CustomEvent("ring", { bubbles: true, detail: alarm })
-            );
+
+          if (delta > 0 && delta < this.duration) {
+            isRinging = true;
+
+            if (!alarm.hasAttribute("ringing")) {
+              alarm.setAttribute("ringing", "");
+              this.dispatchEvent(
+                  new CustomEvent("ring", { bubbles: true, detail: alarm })
+              );
+            }
+
             return;
           }
         }
 
         alarm.removeAttribute("ringing");
       });
+
+      if (isRinging && alarmLoudSound.paused) {
+        alarmLoudSound.currentTime = 0;
+        alarmLoudSound.play();
+      } else if (!isRinging) {
+        alarmLoudSound.pause();
+        alarmLoudSound.currentTime = 0;
+      }
     };
   }
 

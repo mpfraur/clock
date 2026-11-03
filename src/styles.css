@@ -1,5 +1,4 @@
 :root {
-  /* Fluent 2 Design Tokens - Light Theme */
   --fluent-font-family: "Segoe UI Variable", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   --fluent-font-mono: "Segoe UI Numeric", "Segoe UI", SFMono-Regular, Consolas, monospace;
 
@@ -18,20 +17,18 @@
   --fluent-stroke-subtle: #ebebeb;
   --fluent-stroke-strong: #d1d1d1;
 
-  /* Fluent Brand Tokens */
   --fluent-brand: #0f6cbd;
   --fluent-brand-hover: #115ea3;
   --fluent-brand-active: #0c3b5e;
   --fluent-brand-tint: #ebf3fc;
   --fluent-on-brand: #ffffff;
 
-  /* Fluent 2 Radii */
   --fluent-radius-s: 4px;
   --fluent-radius-m: 8px;
   --fluent-radius-l: 12px;
   --fluent-radius-pill: 9999px;
 
-  /* Fluent 2 Elevation Shadows */
+
   --fluent-shadow-card: 0 2px 4px rgba(0, 0, 0, 0.04), 0 0 2px rgba(0, 0, 0, 0.06);
   --fluent-shadow-elevated: 0 8px 16px rgba(0, 0, 0, 0.08), 0 0 2px rgba(0, 0, 0, 0.04);
 
@@ -40,7 +37,6 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    /* Fluent 2 Design Tokens - Dark Theme */
     --fluent-bg-canvas: #202020;
     --fluent-bg-card: #2c2c2c;
     --fluent-bg-card-secondary: #242424;
@@ -138,7 +134,6 @@ nav a:active {
   background-color: var(--fluent-bg-active);
 }
 
-/* Selected Active Tab Highlight Line */
 body:has(#clock:target) nav a[href="#clock"],
 body:has(#alarm:target) nav a[href="#alarm"],
 body:has(#stopwatch:target) nav a[href="#stopwatch"],
