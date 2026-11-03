@@ -1,4 +1,6 @@
-const alarmLoudSound = new Audio("./public/audio/alarm.mp3");
+import { createSound } from "./sound.js";
+
+const alarmLoudSound = createSound("alarm", { formats: ["mp3"] });
 
 export default class Alarm extends HTMLElement {
   #intervalCallback;
@@ -38,11 +40,9 @@ export default class Alarm extends HTMLElement {
       });
 
       if (isRinging && alarmLoudSound.paused) {
-        alarmLoudSound.currentTime = 0;
         alarmLoudSound.play();
-      } else if (!isRinging) {
-        alarmLoudSound.pause();
-        alarmLoudSound.currentTime = 0;
+      } else if (!isRinging && !alarmLoudSound.paused) {
+        alarmLoudSound.stop();
       }
     };
   }

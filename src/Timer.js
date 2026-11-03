@@ -1,6 +1,12 @@
+import { createSound } from "./sound.js";
+
+const intervalSound = createSound("alarm", { formats: ["mp3"] });
+const endSound = createSound("alarm", { formats: ["mp3"] });
+
 export default class Timer extends HTMLElement {
   #intervalCallback;
   #intervalId = 0;
+  #lastIndex = -1;
 
   constructor() {
     super();
@@ -9,7 +15,7 @@ export default class Timer extends HTMLElement {
       const time = this.querySelector("time");
       const inputs = this.querySelectorAll("input");
       const intervals = Array.from(inputs, ({ value }) =>
-        new Date(`1970-01-01T${value}Z`).getTime(),
+          new Date(`1970-01-01T${value}Z`).getTime(),
       );
       const total = intervals.reduce((a, b) => a + b, 0);
       let ms;
@@ -22,6 +28,11 @@ export default class Timer extends HTMLElement {
           i += 1;
         }
 
+        if (this.#lastIndex !== -1 && i !== this.#lastIndex) {
+          intervalSound.play();
+        }
+        this.#lastIndex = i;
+
         ms = intervals[i] - remaining;
         inputs.forEach((input, j) => {
           input.classList.toggle("current-interval", i === j);
@@ -30,6 +41,8 @@ export default class Timer extends HTMLElement {
         clearInterval(this.#intervalId);
         this.#intervalId = 0;
         ms = 0;
+        this.#lastIndex = -1;
+        endSound.play();
         inputs.forEach((input) => {
           input.classList.remove("current-interval");
         });
@@ -75,11 +88,16 @@ export default class Timer extends HTMLElement {
     }
 
     if (
-      (name === "paused" && newValue != null) ||
-      (name === "start-time" && !newValue)
+        (name === "paused" && newValue != null) ||
+        (name === "start-time" && !newValue)
     ) {
       clearInterval(this.#intervalId);
       this.#intervalId = 0;
+      if (name === "start-time") {
+        this.#lastIndex = -1;
+        intervalSound.stop();
+        endSound.stop();
+      }
     } else if (name === "start-time" && newValue && !this.#intervalId) {
       this.#intervalId = setInterval(this.#intervalCallback, 10);
     }
@@ -124,11 +142,11 @@ export default class Timer extends HTMLElement {
       const inputs = this.querySelectorAll("input");
       const currentInput = this.querySelector(".current-interval");
       const intervals = Array.from(inputs, ({ value }) =>
-        new Date(`1970-01-01T${value}Z`).getTime(),
+          new Date(`1970-01-01T${value}Z`).getTime(),
       );
       const cumulativeTime = intervals
-        .slice(0, [...inputs].indexOf(currentInput) + 1)
-        .reduce((a, b) => a + b, 0);
+          .slice(0, [...inputs].indexOf(currentInput) + 1)
+          .reduce((a, b) => a + b, 0);
       const ms = time.dateTime.match(/(\d+(:?\.\d+)?)S$/)[1] * 1000;
       this.startTime = new Date(new Date() - cumulativeTime + ms).toISOString();
     } else {
